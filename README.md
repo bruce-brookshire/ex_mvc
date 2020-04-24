@@ -18,7 +18,17 @@ def deps do
 end
 ```
 
-# Getting started
+# Configuration
+In your config.exs, configure ExMvc as below. Optional configuration can be done for the fields disallowed in a JSON render. See [View](#view) for default disallowed fields.
+
+```elixir
+config :ex_mvc, 
+  repo: MyApp.Repo, 
+  web_namespace: MyAppWeb,
+  disallowed_fields: [:__meta__ :password :another_private_field] # <-- Optional
+```
+
+# Implementation
 
 ### ModelChangeset
 The model changeset module provides standard insert changeset and changesets for use by an adapter (or the service layer)
