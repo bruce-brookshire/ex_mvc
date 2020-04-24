@@ -29,7 +29,7 @@ defmodule TestApp.User do
     ...
   end
 
-  use ExMvc.ModelChangeset, req_fields: ~w[org_group_id user_id]a
+  use ExMvc.ModelChangeset, req_fields: ~w[username phone]a, opt_fields: ~w[avatar_url]a
 end
 ```
 
@@ -53,7 +53,7 @@ By default, View behaves such that it redacts the following fields (called disal
 - `password`
 - `password_hash`
 
-Disallowed fields can be set on configuration, using disallowed_fields: `[:__meta__, :password, :another_private_field]`
+Disallowed fields can be set on configuration, using the config: `disallowed_fields: ~w[__meta__ password another_private_field]a`
 
 e.g:
 ```elixir
