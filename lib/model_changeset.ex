@@ -1,4 +1,4 @@
-defmodule ExMVC.ModelChangeset do
+defmodule ExMvc.ModelChangeset do
   defmacro __using__(options) do
     option_map = Map.new(options)
 

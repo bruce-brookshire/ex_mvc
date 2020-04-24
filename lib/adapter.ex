@@ -1,12 +1,13 @@
-defmodule ExMVC.Adapter do
+defmodule ExMvc.Adapter do
   # :local_dependency, path: "path/to/local_dependency"
 
   # web_namespace
   # repo
   # disallowed_fields
   defmacro __using__(model: model) do
+    repo = Application.get_env(:ex_mvc, :repo)
     quote do
-      alias Application.get_env(:ex_mvc, :repo)
+      alias unquote(repo)
       alias unquote(model), as: Model
 
       import Ecto.Query

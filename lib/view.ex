@@ -1,40 +1,48 @@
-defmodule ExMVC.View do
-  defmacro __using__(params) do
-    %{
-      single_atom: single_atom,
-      plural_atom: plural_atom,
-      model: model
-    } = params |> Map.new()
+defmodule ExMvc.View do
+  defmacro __using__(model: model) do
+    namespace = Application.get_env(:ex_mvc, :web_namespace)
+
+    disallowed_fields =
+      Application.get_env(:ex_mvc, :disallowed_fields) || ~w[__meta__ password password_hash]a
 
     quote do
-      use Application.get_env(:ex_mvc, :web_namespace), :view
+      use unquote(namespace), :view
 
       alias unquote(model), as: Model
       alias Ecto.Association.NotLoaded
 
-      @disallowed_fields Application.get_env(:ex_mvc, :disallowed_fields)
-                           
+      @disallowed_fields unquote(disallowed_fields)
 
-      def single_atom, do: unquote(single_atom)
-      def plural_atom, do: unquote(plural_atom)
-
-      def render("show.json", %{unquote(single_atom) => model}) do
-        fields = Model.__schema__(:fields) |> Enum.map(&{&1, Map.get(model, &1)})
+      def render("show.json", %{model: model}) do
+        fields =
+          Model.__schema__(:fields)
+          |> Enum.filter(&(&1 not in unquote(disallowed_fields)))
+          |> Enum.map(&{&1, Map.get(model, &1)})
 
         associations =
           Model.__schema__(:associations)
-          |> Enum.map(&{&1, render_association(Map.get(model, &1))})
+          |> Enum.map(&{&1, Map.get(model, &1) |> render_association()})
 
         (fields ++ associations)
         |> Map.new()
       end
 
-      def render("index.json", %{unquote(plural_atom) => models}) do
-        render_many(models, __MODULE__, "show.json", as: single_atom())
+      def render("index.json", %{models: models}) do
+        render_many(models, __MODULE__, "show.json", as: :model)
       end
 
-      defp render_association(%{} = model),
-        do: model |> Map.to_list() |> Enum.filter(&render_association/1) |> Map.new()
+      defp render_association(%{__struct__: struct} = model) do
+        struct.__schema__(:fields)
+        |> Enum.filter(&(&1 not in unquote(disallowed_fields)))
+        |> Enum.map(&{&1, Map.get(model, &1)})
+        |> Map.new()
+      end
+
+      defp render_association(%{} = model) do
+        Map.to_list(model)
+        |> Enum.filter(&render_association/1)
+        |> Map.new()
+      end
 
       defp render_association({_name, %NotLoaded{}}), do: false
       defp render_association({field, _}) when field in @disallowed_fields, do: false
