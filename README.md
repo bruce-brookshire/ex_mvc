@@ -1,7 +1,7 @@
 # ExMvc
 #### Making bootstrapping a RESTful Elixir API easier than ever
 
-While Phoenix provides many CLI tools to expedite the bootstrapping process, I felt like there was a need to use metaprogramming to create simple model, view, controller, and service layer modules. It is easy to implement, and flexible. You can override a single function and even use plugs for your controllers!
+While Phoenix provides many CLI tools to expedite the writing of boilerplate code, I felt like there was a need to use metaprogramming to greatly simplify creating model, view, controller, and service layer modules. ExMvc is easy to implement, and flexible. You can override a single function and even use plugs for your controllers!
 
 Please open an issue if you find any bugs or have any ideas to make this package better/more relevant!
 
