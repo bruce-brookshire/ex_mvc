@@ -13,7 +13,8 @@ defmodule ExMvc.Adapter do
 
       import Ecto.Query
 
-      def get_by_id(id), do: Repo.get(Model, id) |> preload()
+      def get_by_id(id) when is_binary(id), do: id |> String.to_integer() |> get_by_id()
+      def get_by_id(id) when is_integer(id), do: Repo.get(Model, id) |> preload()
 
       def get_by_params(query_params) when is_map(query_params) do
         fields = Model.__schema__(:fields) |> Enum.map(&to_string/1)
@@ -41,6 +42,9 @@ defmodule ExMvc.Adapter do
 
       def create(%{} = params),
         do: params |> Model.insert_changeset() |> Repo.insert() |> preload()
+
+      def delete(id) when is_binary(id), do: id |> String.to_integer() |> __MODULE__.delete()
+      def delete(id) when is_integer(id), do: id |> get_by_id() |> Repo.delete()
 
       defp preload({:ok, %{} = model}), do: {:ok, preload(model)}
 

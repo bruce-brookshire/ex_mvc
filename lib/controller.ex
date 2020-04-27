@@ -64,7 +64,14 @@ defmodule ExMvc.Controller do
         end
       end
 
-      defoverridable show: 2, update: 2, create: 2, index: 2
+      def delete(conn, %{"id" => id}) do
+        case Adapter.delete(id) do
+          {:ok, _model} -> send_resp(conn, 204, "")
+          {:error, _changeset} -> send_resp(conn, 404, "Not found")
+        end
+      end
+
+      defoverridable show: 2, update: 2, create: 2, index: 2, delete: 2
     end
   end
 end
