@@ -34,7 +34,7 @@ defmodule ExMvc.Adapter do
           from(m in Model, where: ^query_params)
           |> Repo.exists?()
 
-      def update(id, %{} = params) when is_integer(id),
+      def update(id, %{} = params) when is_binary(id) or is_integer(id),
         do: get_by_id(id) |> __MODULE__.update(params)
 
       def update(%Model{} = object, %{} = params),
