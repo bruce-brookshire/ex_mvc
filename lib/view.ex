@@ -31,6 +31,8 @@ defmodule ExMvc.View do
         render_many(models, __MODULE__, "show.json", as: :model)
       end
 
+      defp render_association(%NotLoaded{}), do: nil
+
       defp render_association(%{__struct__: struct} = model) do
         struct.__schema__(:fields)
         |> Enum.filter(&(&1 not in unquote(disallowed_fields)))
