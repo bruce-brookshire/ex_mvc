@@ -27,7 +27,15 @@ defmodule ExMvc.Controller do
       end
 
       def index(conn, params) do
-        conn |> send_resp(200, "")
+        case Adapter.get_by_params(params) do
+          models when is_list(models) ->
+            conn
+            |> put_view(View)
+            |> render("index.json", models: models)
+
+          _ ->
+            send_resp(conn, 404, "Params not found")
+        end
       end
 
       def update(conn, %{"id" => id} = params) do
