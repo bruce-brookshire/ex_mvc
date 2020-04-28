@@ -25,7 +25,7 @@ In your config.exs, configure ExMvc as below. Optional configuration can be done
 config :ex_mvc, 
   repo: MyApp.Repo, 
   web_namespace: MyAppWeb,
-  disallowed_fields: [:__meta__ :password :another_private_field] # <-- Optional
+  disallowed_fields: [:__meta__, :password, :another_private_field] # <-- Optional
 ```
 
 # Implementation
@@ -42,7 +42,7 @@ defmodule TestApp.User do
     ...
   end
 
-  use ExMvc.ModelChangeset, req_fields: [:username :phone], opt_fields: [:avatar_url]
+  use ExMvc.ModelChangeset, req_fields: [:username, :phone], opt_fields: [:avatar_url]
 end
 ```
 
@@ -66,7 +66,7 @@ By default, View behaves such that it redacts the following fields (called disal
 - `password`
 - `password_hash`
 
-Disallowed fields can be set on configuration, using the config: `disallowed_fields: [:__meta__ :password :another_private_field]`
+Disallowed fields can be set on configuration, using the config: `disallowed_fields: [:__meta__, :password, :another_private_field]`
 
 e.g:
 ```elixir
