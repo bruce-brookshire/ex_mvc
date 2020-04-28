@@ -46,6 +46,9 @@ defmodule ExMvc.View do
         |> Map.new()
       end
 
+      defp render_association(models) when is_list(models),
+        do: Enum.map(models, &render_association/1)
+
       defp render_association({_name, %NotLoaded{}}), do: false
       defp render_association({field, _}) when field in @disallowed_fields, do: false
       defp render_association(_), do: true

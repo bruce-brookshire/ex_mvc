@@ -56,7 +56,7 @@ defmodule ExMvc.Adapter do
 
       defp preload(error), do: error
 
-      defoverridable create: 1, update: 2, get_by_params: 1, get_by_id: 1
+      defoverridable create: 1, update: 2, get_by_params: 1, get_by_id: 1, exists?: 1
     end
   end
 end
