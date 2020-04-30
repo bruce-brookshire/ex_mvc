@@ -1,9 +1,11 @@
 defmodule ExMvc.View do
+  
+  @disallowed_fields Application.get_env(:ex_mvc, :disallowed_fields) || ~w[__meta__ password password_hash]a
+
+  alias Ecto.Association.NotLoaded
+
   defmacro __using__(model: model) do
     namespace = Application.get_env(:ex_mvc, :web_namespace)
-
-    disallowed_fields =
-      Application.get_env(:ex_mvc, :disallowed_fields) || ~w[__meta__ password password_hash]a
 
     quote do
       use unquote(namespace), :view
@@ -11,14 +13,13 @@ defmodule ExMvc.View do
       import ExMvc.View
 
       alias unquote(model), as: Model
-      alias Ecto.Association.NotLoaded
 
-      @disallowed_fields unquote(disallowed_fields)
+      @disallowed_fields unquote(@disallowed_fields)
 
       def render("show.json", %{model: model}) do
         fields =
           Model.__schema__(:fields)
-          |> Enum.filter(&(&1 not in unquote(disallowed_fields)))
+          |> Enum.filter(&(&1 not in @disallowed_fields))
           |> Enum.map(&{&1, Map.get(model, &1)})
 
         associations =
@@ -41,7 +42,7 @@ defmodule ExMvc.View do
 
   def render_association(%{__struct__: struct} = model) do
     struct.__schema__(:fields)
-    |> Enum.filter(&(&1 not in unquote(disallowed_fields)))
+    |> Enum.filter(&(&1 not in @disallowed_fields))
     |> Enum.map(&{&1, Map.get(model, &1)})
     |> Map.new()
   end
