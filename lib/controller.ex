@@ -45,6 +45,9 @@ defmodule ExMvc.Controller do
             |> put_view(View)
             |> render("show.json", model: model)
 
+          {:error, %{errors: errors}} ->
+            send_resp(conn, 422, stringify_changeset_errors(errors))
+
           error ->
             IO.inspect(error)
             send_resp(conn, 422, "Unprocessable Entity")
@@ -57,6 +60,9 @@ defmodule ExMvc.Controller do
             conn
             |> put_view(View)
             |> render("show.json", model: model)
+
+          {:error, %{errors: errors}} ->
+            send_resp(conn, 422, stringify_changeset_errors(errors))
 
           error ->
             IO.inspect(error)
@@ -73,5 +79,16 @@ defmodule ExMvc.Controller do
 
       defoverridable show: 2, update: 2, create: 2, index: 2, delete: 2
     end
+  end
+
+  def stringify_changeset_errors(errors) do
+    content =
+      errors
+      |> Enum.map(fn {field, {message, _details}} ->
+        "\"#{field}: #{message}\""
+      end)
+      |> Enum.join(", ")
+
+    "{\"Errors\": [" <> content <> "]}"
   end
 end
