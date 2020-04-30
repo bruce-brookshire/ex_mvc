@@ -37,11 +37,23 @@ defmodule ExMvc.Adapter do
       def update(id, %{} = params) when is_binary(id) or is_integer(id),
         do: get_by_id(id) |> __MODULE__.update(params)
 
-      def update(%Model{} = object, %{} = params),
-        do: object |> Model.changeset(params) |> Repo.update() |> preload()
+      def update(%Model{} = object, %{} = params) do
+        object
+        |> Model.changeset(params)
+        |> case do
+          {:error, _} = error -> error
+          changeset -> Repo.update(changeset) |> preload()
+        end
+      end
 
-      def create(%{} = params),
-        do: params |> Model.insert_changeset() |> Repo.insert() |> preload()
+      def create(%{} = params) do
+        params
+        |> Model.insert_changeset()
+        |> case do
+          {:error, _} = error -> error
+          changeset -> Repo.insert() |> preload()
+        end
+      end
 
       def delete(id) when is_binary(id), do: id |> String.to_integer() |> __MODULE__.delete()
       def delete(id) when is_integer(id), do: id |> get_by_id() |> Repo.delete()
