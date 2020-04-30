@@ -5,9 +5,11 @@ defmodule ExMvc.Controller do
 
     quote do
       use Phoenix.Controller, namespace: unquote(Application.get_env(:ex_mvc, :web_namespace))
+      
       import Plug.Conn
+      import ExMvc.Controller
+      
       alias AppWeb.Router.Helpers, as: Routes
-
       alias unquote(adapter), as: Adapter
       alias unquote(view), as: View
 
