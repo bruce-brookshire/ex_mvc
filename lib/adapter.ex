@@ -51,7 +51,7 @@ defmodule ExMvc.Adapter do
         |> Model.insert_changeset()
         |> case do
           {:error, _} = error -> error
-          changeset -> Repo.insert() |> preload()
+          changeset -> Repo.insert(changeset) |> preload()
         end
       end
 
