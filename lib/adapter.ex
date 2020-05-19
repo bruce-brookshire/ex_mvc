@@ -57,6 +57,7 @@ defmodule ExMvc.Adapter do
 
       def delete(id) when is_binary(id), do: id |> String.to_integer() |> __MODULE__.delete()
       def delete(id) when is_integer(id), do: id |> get_by_id() |> Repo.delete()
+      def delete(%Model{} = model), do: Repo.delete(model)
 
       defp preload({:ok, %{} = model}), do: {:ok, preload(model)}
 
