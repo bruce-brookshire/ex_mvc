@@ -19,12 +19,14 @@ defmodule ExMvc.Adapter do
       def get_by_params(query_params) when is_map(query_params) do
         fields = Model.__schema__(:fields) |> Enum.map(&to_string/1)
 
-        params =
-          query_params
-          |> Map.take(fields)
-          |> Enum.map(fn {key, val} -> {String.to_atom(key), val} end)
+        query_params
+        |> Map.take(fields)
+        |> Enum.map(fn {key, val} -> {String.to_atom(key), val} end)
+        |> get_by_params()
+      end
 
-        from(m in Model, where: ^params)
+      def get_by_params(query_params) when is_list(query_params) do
+        from(m in Model, where: ^query_params)
         |> Repo.all()
         |> Enum.map(&preload/1)
       end
