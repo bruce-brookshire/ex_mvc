@@ -1,7 +1,7 @@
 # ExMvc
 #### Making bootstrapping a RESTful Elixir API easier than ever
 
-While Phoenix provides many CLI tools to expedite the writing of boilerplate code, I felt like there was a need to use metaprogramming to greatly simplify creating model, view, controller, and service layer modules. ExMvc is easy to implement, and flexible. You can override a single function and even use plugs for your controllers!
+While Phoenix provides many CLI tools to expedite the writing of boilerplate code, I felt like there was a need to use metaprogramming to greatly simplify creating model, view, controller, and service layer modules. ExMvc is easy to implement, and flexible. You can override any function, as well as specify exactly what functions you want to generate in a controller!
 
 Please open an issue if you find any bugs or have any ideas to make this package better/more relevant!
 
@@ -76,17 +76,14 @@ end
 ```
 
 ### Controller
-Controllers generate GET, PUT, POST and DELETE functions for each model, using functionality provided in the adapter and view to functionally return content. Controllers also support plugs for security, and can be configured as shown below.
+Controllers generate GET, PUT, POST and DELETE functions for each model, using functionality provided in the adapter and view to functionally return content.
 
 e.g:
 ```elixir
 defmodule TestAppWeb.UserController do
   use ExMvc.Controller, 
     adapter: TestApp.User, 
-    view: TestAppWeb.UserView, 
-    plugs: (
-      plug :verify_owner, :user
-    )
+    view: TestAppWeb.UserView
 end
 ```
 

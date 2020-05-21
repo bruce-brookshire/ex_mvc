@@ -1,16 +1,13 @@
 defmodule ExMvc.Controller do
   defmacro __using__(params) do
     %{adapter: adapter, view: view} = mapped_params = Map.new(params)
-    plug_block = Map.get(mapped_params, :plugs)
 
-    if Map.has_key?(mapped_params, :only) and Map.has_key?(mapped_params, :except) do
-      raise "Cannot use both :only and :except, please use just one."
-    end
+    if Map.has_key?(mapped_params, :only) and Map.has_key?(mapped_params, :except),
+      do: raise("Cannot use both :only and :except, please use just one.")
 
     all_routes = ~w[show index update create delete]a
 
-    except_routes =
-      Map.get(mapped_params, :except) || []
+    except_routes = Map.get(mapped_params, :except) || []
 
     routes =
       (Map.get(mapped_params, :only) || all_routes)
@@ -122,8 +119,6 @@ defmodule ExMvc.Controller do
       alias AppWeb.Router.Helpers, as: Routes
       alias unquote(adapter), as: Adapter
       alias unquote(view), as: View
-
-      unquote(plug_block)
 
       unquote(route_functions)
 
