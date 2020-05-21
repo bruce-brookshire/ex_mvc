@@ -81,11 +81,24 @@ Controllers generate GET, PUT, POST and DELETE functions for each model, using f
 e.g:
 ```elixir
 defmodule TestAppWeb.UserController do
-  use ExMvc.Adapter, 
+  use ExMvc.Controller, 
     adapter: TestApp.User, 
     view: TestAppWeb.UserView, 
     plugs: (
       plug :verify_owner, :user
     )
 end
+```
+
+By default, controllers will create the following functions: show/2, index/2, update/2, create/2, delete/2
+This can be controlled using the :only (only create the routes specified) or :except (create all default routes except the following) options.
+
+e.g:
+```elixir
+use ExMvc.Controller,
+  ...,
+  # Either
+  only: [:show, :index, :update] # Generates: show/2, index/2, and update/2
+  # Or
+  except: [:create, :update] # Generates: show/2, index/2, delete/2
 ```
