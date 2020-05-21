@@ -13,7 +13,7 @@ by adding `ex_mvc` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_mvc, "~> 0.1.1"}
+    {:ex_mvc, "~> 0.3.1"}
   ]
 end
 ```
