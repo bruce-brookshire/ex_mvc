@@ -110,7 +110,7 @@ defmodule ExMvc.Controller do
       |> Map.take(routes)
       |> Enum.map(&elem(&1, 1))
 
-    route_overridables = routes |> Enum.map(& {&1, 2}) |> IO.inspect
+    route_overridables = routes |> Enum.map(& {&1, 2})
 
     quote do
       use Phoenix.Controller, namespace: unquote(Application.get_env(:ex_mvc, :web_namespace))
@@ -124,7 +124,7 @@ defmodule ExMvc.Controller do
 
       unquote(route_functions)
 
-      defoverridable show: 2, update: 2, create: 2, index: 2, delete: 2
+      defoverridable unquote(route_overridables)
     end
   end
 
