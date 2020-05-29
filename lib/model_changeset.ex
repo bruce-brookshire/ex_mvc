@@ -28,7 +28,7 @@ defmodule ExMvc.ModelChangeset do
         do:
           changeset
           |> cast(params, all_fields())
-          |> validate_required(all_fields())
+          |> validate_required(req_fields())
 
       defoverridable insert_changeset: 1, changeset: 2
     end
