@@ -128,7 +128,7 @@ defmodule ExMvc.Controller do
     end
   end
 
-  def stringify_changeset_errors(errors) do
+  def stringify_changeset_errors(errors) when is_list(errors) do
     content =
       errors
       |> Enum.map(fn {field, {message, _details}} ->
@@ -136,6 +136,6 @@ defmodule ExMvc.Controller do
       end)
       |> Enum.join(", ")
 
-    "{\"Errors\": [" <> content <> "]}"
+    "{\"errors\": [" <> content <> "]}"
   end
 end

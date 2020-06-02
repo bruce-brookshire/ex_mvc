@@ -44,7 +44,7 @@ defmodule ExMvc.Adapter do
         |> Model.changeset(params)
         |> case do
           %{valid?: true} = changeset -> Repo.update(changeset) |> preload()
-          error -> {:error, error |> IO.inspect}
+          error -> {:error, error}
         end
       end
 
@@ -53,7 +53,7 @@ defmodule ExMvc.Adapter do
         |> Model.insert_changeset()
         |> case do
           %{valid?: true} = changeset -> Repo.insert(changeset) |> preload()
-          error -> {:error, error |> IO.inspect}
+          error -> {:error, error}
         end
       end
 
